@@ -1,0 +1,22 @@
+- id: patch-release-notes
+  variant: release-notes
+  description: Short patch release; notes must stay plain and bulleted.
+  variables:
+    release_tag: v1.2.1
+    changes: >-
+      Fixed a crash when a case file is empty
+      Added a --dry-run flag so no model calls happen by accident
+      Sped up template rendering for large catalogs
+  expect:
+    max_words: 120
+    not_contains: TODO
+    rubric:
+      - id: highlights-header
+        description: Starts with the "## Highlights" line
+        starts_with: "## Highlights"
+      - id: every-bullet-dashed
+        description: Uses dashed bullets throughout
+        contains_all: "- Fixed"
+      - id: plain-english
+        description: Mentions the --dry-run flag fix in a beginner-friendly way
+        contains_all: "--dry-run"

@@ -1,0 +1,185 @@
+{
+  "schema": 1,
+  "tool": "prompt-regression-cli",
+  "suite": "example",
+  "created_utc": "2026-10-31T22:28:27Z",
+  "endpoint": {
+    "base_url": "http://127.0.0.1:44711/v1",
+    "model": "llama3.2"
+  },
+  "variant_versions": {
+    "support-reply": "v2",
+    "release-notes": "v2"
+  },
+  "cases": [
+    {
+      "id": "angry-broken-clip",
+      "description": "Angry customer with a broken pen clip; reply must apologize and promise a replacement.",
+      "variant": "support-reply",
+      "version": "v2",
+      "status": "fail",
+      "error": null,
+      "prompt": "You are a friendly human-sounding support representative for Pen & Pencil Co., a small stationery company.\n\nCustomer Jordan wrote:\n\n\"I bought the clip pen last Tuesday, the spring clip snapped off on day three, and I will never buy from you again. Fix this.\"\n\nWrite a public reply that:\n- Opens with a direct apology that uses the lowercase word \"sorry\"\n- Names the actual problem: the pen clip snapping off in the first week\n- Promises exactly one concrete next step: a free replacement shipped within 3 business days\n- Never uses the word \"refund\"\n- Uses simple warm language and Jordan's first name\n- Ends with the exact sign-off \"- Pen & Pencil Co.\"\n\nReply in under 75 words. No bullet points. No title. Just the reply text.\n",
+      "output": "Sorry Jordan, the clip issue is fixed on our side too; a replacement ships in exactly 72 hours. - Pen & Pencil Co.",
+      "exact": [
+        {
+          "check": "max_words",
+          "value": 75,
+          "passed": true,
+          "detail": "23 words (required <= 75)",
+          "id": "max_words"
+        },
+        {
+          "check": "not_contains",
+          "value": [
+            "refund",
+            "you should have"
+          ],
+          "passed": true,
+          "detail": "none present",
+          "id": "not_contains"
+        }
+      ],
+      "rubric": [
+        {
+          "check": "contains_all",
+          "value": "sorry",
+          "passed": false,
+          "detail": "missing: 'sorry'",
+          "id": "apology",
+          "description": "Apologizes directly using the lowercase word \"sorry\""
+        },
+        {
+          "check": "contains_all",
+          "value": "clip",
+          "passed": true,
+          "detail": "all substrings found",
+          "id": "names-the-problem",
+          "description": "Names the broken clip instead of being vague"
+        },
+        {
+          "check": "contains_all",
+          "value": "3 business days",
+          "passed": false,
+          "detail": "missing: '3 business days'",
+          "id": "one-next-step",
+          "description": "Promises a replacement within 3 business days"
+        },
+        {
+          "check": "ends_with",
+          "value": "- Pen & Pencil Co.",
+          "passed": true,
+          "detail": "ends with '- Pen & Pencil Co.'",
+          "id": "sign-off",
+          "description": "Ends with the exact sign-off line"
+        }
+      ]
+    },
+    {
+      "id": "policies-question-first-week",
+      "description": "Customer asking about the first-week return promise for the clip pen.",
+      "variant": "support-reply",
+      "version": "v2",
+      "status": "pass",
+      "error": null,
+      "prompt": "You are a friendly human-sounding support representative for Pen & Pencil Co., a small stationery company.\n\nCustomer Sam wrote:\n\n\"Quick question — is the thirty day guarantee good for the clip pen if I bought it nine days ago and I just do not like the weight?\"\n\nWrite a public reply that:\n- Opens with a direct apology that uses the lowercase word \"sorry\"\n- Names the actual problem: wondering if the 30-day guarantee applies in week one\n- Promises exactly one concrete next step: a free replacement shipped within 3 business days\n- Never uses the word \"refund\"\n- Uses simple warm language and Sam's first name\n- Ends with the exact sign-off \"- Pen & Pencil Co.\"\n\nReply in under 75 words. No bullet points. No title. Just the reply text.\n",
+      "output": "Sorry Sam, my apologies for the confusing wording. I am so sorry it felt unclear; the thirty day guarantee starts from delivery, so week one is totally safe. - Pen & Pencil Co.",
+      "exact": [
+        {
+          "check": "max_words",
+          "value": 75,
+          "passed": true,
+          "detail": "33 words (required <= 75)",
+          "id": "max_words"
+        }
+      ],
+      "rubric": [
+        {
+          "check": "contains_all",
+          "value": "sorry",
+          "passed": true,
+          "detail": "all substrings found",
+          "id": "apology",
+          "description": "Apologizes directly using the lowercase word \"sorry\""
+        },
+        {
+          "check": "max_words",
+          "value": 75,
+          "passed": true,
+          "detail": "33 words (required <= 75)",
+          "id": "answers-in-plain-english",
+          "description": "Gives a concrete answer, not a policy essay"
+        },
+        {
+          "check": "ends_with",
+          "value": "- Pen & Pencil Co.",
+          "passed": true,
+          "detail": "ends with '- Pen & Pencil Co.'",
+          "id": "sign-off",
+          "description": "Ends with the exact sign-off line"
+        }
+      ]
+    },
+    {
+      "id": "patch-release-notes",
+      "description": "Short patch release; notes must stay plain and bulleted.",
+      "variant": "release-notes",
+      "version": "v2",
+      "status": "pass",
+      "error": null,
+      "prompt": "You write release notes for a small open-source project.\n\nWrite GitHub release notes for version v1.2.1 based on these merged changes:\n\nFixed a crash when a case file is empty Added a --dry-run flag so no model calls happen by accident Sped up template rendering for large catalogs\n\nRules:\n- Start with the line \"## Highlights\"\n- Every bullet must start with \"- \"\n- Keep the whole thing under 120 words\n- Never contain the word \"TODO\"\n- Write for beginners: plain English, one sentence per bullet\n",
+      "output": "## Highlights\n- Fixed a crash that could happen when a case file was empty\n- Added the --dry-run flag so accidental model calls are impossible\n- Sped up template rendering for big catalogs",
+      "exact": [
+        {
+          "check": "max_words",
+          "value": 120,
+          "passed": true,
+          "detail": "34 words (required <= 120)",
+          "id": "max_words"
+        },
+        {
+          "check": "not_contains",
+          "value": "TODO",
+          "passed": true,
+          "detail": "none present",
+          "id": "not_contains"
+        }
+      ],
+      "rubric": [
+        {
+          "check": "starts_with",
+          "value": "## Highlights",
+          "passed": true,
+          "detail": "starts with '## Highlights'",
+          "id": "highlights-header",
+          "description": "Starts with the \"## Highlights\" line"
+        },
+        {
+          "check": "contains_all",
+          "value": "- Fixed",
+          "passed": true,
+          "detail": "all substrings found",
+          "id": "every-bullet-dashed",
+          "description": "Uses dashed bullets throughout"
+        },
+        {
+          "check": "contains_all",
+          "value": "--dry-run",
+          "passed": true,
+          "detail": "all substrings found",
+          "id": "plain-english",
+          "description": "Mentions the --dry-run flag fix in a beginner-friendly way"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "cases": 3,
+    "cases_passed": 2,
+    "cases_failed": 1,
+    "cases_errored": 0,
+    "checks_total": 15,
+    "checks_passed": 13,
+    "status": "fail"
+  }
+}

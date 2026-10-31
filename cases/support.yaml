@@ -1,0 +1,49 @@
+- id: angry-broken-clip
+  variant: support-reply
+  description: Angry customer with a broken pen clip; reply must apologize and promise a replacement.
+  variables:
+    customer_name: Jordan
+    issue: the pen clip snapping off in the first week
+    message: >-
+      I bought the clip pen last Tuesday, the spring clip snapped off on day
+      three, and I will never buy from you again. Fix this.
+  expect:
+    max_words: 75
+    not_contains:
+      - refund
+      - you should have
+    rubric:
+      - id: apology
+        description: Apologizes directly using the lowercase word "sorry"
+        contains_all: "sorry"
+      - id: names-the-problem
+        description: Names the broken clip instead of being vague
+        contains_all: "clip"
+      - id: one-next-step
+        description: Promises a replacement within 3 business days
+        contains_all: "3 business days"
+      - id: sign-off
+        description: Ends with the exact sign-off line
+        ends_with: "- Pen & Pencil Co."
+
+- id: policies-question-first-week
+  variant: support-reply
+  description: Customer asking about the first-week return promise for the clip pen.
+  variables:
+    customer_name: Sam
+    issue: wondering if the 30-day guarantee applies in week one
+    message: >-
+      Quick question — is the thirty day guarantee good for the clip pen if I
+      bought it nine days ago and I just do not like the weight?
+  expect:
+    max_words: 75
+    rubric:
+      - id: apology
+        description: Apologizes directly using the lowercase word "sorry"
+        contains_all: "sorry"
+      - id: answers-in-plain-english
+        description: Gives a concrete answer, not a policy essay
+        max_words: 75
+      - id: sign-off
+        description: Ends with the exact sign-off line
+        ends_with: "- Pen & Pencil Co."
